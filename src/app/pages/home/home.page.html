@@ -1,0 +1,196 @@
+<ion-content fullscreen="true" class="ion-no-padding">
+  <ion-refresher
+    slot="fixed"
+    pullFactor="0.5"
+    pullMin="100"
+    pullMax="200"
+    (ionRefresh)="refreshData($event)"
+  >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-grid>
+    <ion-row class="bg-hdr">
+      <ion-col>
+        <ion-row>
+          <ion-col size="11">
+            <div style="width: 10%; float: left">
+              <ion-avatar>
+                <img src="assets/icon/images.png" />
+              </ion-avatar>
+            </div>
+            <div style="margin-left: 80px">
+              <div class="ion-text-start">
+                <h5><ion-text color="light">Hai, {{fullName}}</ion-text></h5>
+              </div>
+              <div class="latsgo">
+                <ion-text color="light">
+                  Sebagai
+                  <b *ngIf="role==1">Administrator </b>
+                  <b *ngIf="role==2">Operator </b>
+                </ion-text>
+              </div>
+            </div>
+          </ion-col>
+          <ion-col size="1" class="ion-content-end">
+            <ion-buttons style="margin-left: -20px">
+              <ion-button (click)="btnPopover($event)">
+                <ion-icon
+                  color="light"
+                  slot="icon-only"
+                  md="ellipsis-vertical"
+                ></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <div class="cls-total shadow">
+        <ion-row class="ion-text-center">
+          <ion-col size="6">
+            <div class="vl">
+              <h2>
+                <ion-text color="primary" class="totalValue"
+                  >{{totalTray}}</ion-text
+                >
+              </h2>
+              <p style="font-size: 12px">Total Tray</p>
+            </div>
+          </ion-col>
+          <ion-col csize="6">
+            <h2>
+              <ion-text color="primary" class="totalValue"
+                >{{totalTrayJual}}</ion-text
+              >
+            </h2>
+            <p style="font-size: 12px">Total Terjual</p>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-card
+          (click)="goTo('produksi')"
+          style="background: rgb(154 237 251 / 35%)"
+        >
+          <div class="card-div">
+            <ion-icon color="light" name="egg-outline" size="large"></ion-icon>
+          </div>
+          <ion-card-header>
+            <ion-card-subtitle
+              ><b>Produksi</b><br />Telur Harian</ion-card-subtitle
+            >
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6">
+        <ion-card
+          (click)="goTo('jual')"
+          style="background: rgb(204 241 219 / 53%)"
+        >
+          <div class="card-div">
+            <ion-icon
+              color="light"
+              name="clipboard-outline"
+              size="large"
+            ></ion-icon>
+          </div>
+          <ion-card-header>
+            <ion-card-subtitle
+              ><b>Transaksi</b><br />Penjualan Telur</ion-card-subtitle
+            >
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">
+        <ion-card
+          (click)="goTo('luar')"
+          class="ion-no-border"
+          style="background: rgb(115 119 249 / 19%)"
+        >
+          <div class="card-div">
+            <ion-icon
+              color="light"
+              name="analytics-outline"
+              size="large"
+            ></ion-icon>
+          </div>
+          <ion-card-header>
+            <ion-card-subtitle
+              ><b>Transaksi</b><br />Pengeluaran</ion-card-subtitle
+            >
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6">
+        <ion-card
+          (click)="goTo('pembayaran')"
+          class="ion-no-border"
+          style="background: rgb(249 199 199 / 38%)"
+        >
+          <div class="card-div">
+            <ion-icon
+              color="light"
+              name="wallet-outline"
+              size="large"
+            ></ion-icon>
+          </div>
+          <ion-card-header>
+            <ion-card-subtitle
+              ><b>History</b><br />Pembayaran</ion-card-subtitle
+            >
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="isAdministrator">
+      <ion-col size="6">
+        <ion-card
+          (click)="goTo('tabs')"
+          class="ion-no-border"
+          style="background: rgb(238 243 199 / 42%)"
+        >
+          <div class="card-div">
+            <ion-icon
+              color="light"
+              name="analytics-outline"
+              size="large"
+            ></ion-icon>
+          </div>
+          <ion-card-header>
+            <ion-card-subtitle
+              ><b>Laporan</b><br />Penjualan Telur</ion-card-subtitle
+            >
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6">
+        <ion-card
+          (click)="showMenu()"
+          class="ion-no-border"
+          style="background: rgb(228 148 226 / 19%)"
+        >
+          <div class="card-div">
+            <ion-icon
+              color="light"
+              name="settings-outline"
+              size="large"
+            ></ion-icon>
+          </div>
+          <ion-card-header>
+            <ion-card-subtitle
+              ><b>Master</b><br />Data aplikasi</ion-card-subtitle
+            >
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

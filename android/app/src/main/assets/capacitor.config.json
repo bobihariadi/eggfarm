@@ -1,0 +1,6 @@
+{
+	"appId": "io.egg.com",
+	"appName": "eggfarm",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}

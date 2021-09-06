@@ -1,0 +1,217 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import {
+  AlertController,
+  LoadingController,
+  ModalController,
+  NavParams,
+  ToastController,
+} from '@ionic/angular';
+import { Storage } from '@ionic/storage';
+import { conf } from 'src/config';
+
+@Component({
+  selector: 'app-formayam',
+  templateUrl: './formayam.page.html',
+  styleUrls: ['./formayam.page.scss'],
+})
+export class FormayamPage implements OnInit {
+  passId: number;
+  action: string;
+  jwt: any;
+  fakeList: Array<any> = new Array(3);
+  showList: boolean = false;
+
+  batchNo: string;
+  jumlah: any;
+  tgl: any = new Date().toISOString();
+  keterangan: string;
+  usia: number;
+
+  DECIMAL_SEPARATOR = '.';
+  GROUP_SEPARATOR = ',';
+
+  constructor(
+    private modalCtrl: ModalController,
+    private navParams: NavParams,
+    private storageCtrl: Storage,
+    private http: HttpClient,
+    private loadingCtrl: LoadingController,
+    private toastCtrl: ToastController,
+    private alertCtrl: AlertController
+  ) {}
+
+  async ngOnInit() {
+    await this.storageCtrl.create();
+    this.passId = this.navParams.get('pass_id');
+    this.action = this.navParams.get('action');
+
+    this.storageCtrl.get('dataLogin').then(async (data) => {
+      this.jwt = data[0].jwt;
+      if (this.action == 'Edit') {
+        await this.getData();
+      } else {
+        // console.log('sini');
+        this.showList = true;
+      }
+    });
+  }
+
+  closeModal() {
+    let dataTest = {
+      aa: 'aa',
+      bb: 'bb',
+    };
+    this.modalCtrl.dismiss(dataTest);
+  }
+
+  async getData() {
+    var headers = new HttpHeaders();
+    headers.append('Content-Type', 'application/json');
+    headers = headers.append('Authorization', 'Bearer ' + this.jwt); //bearer
+
+    let where = 'where id =' + this.passId;
+
+    let arrData = {
+      action: 'rowtable',
+      select: '',
+      table: 'm_ayam',
+      limit: '',
+      order: '',
+      where: where,
+    };
+
+    this.http
+      .post(conf.api_url_wartek + 'master', arrData, { headers: headers })
+      .subscribe(
+        async (data) => {
+          this.batchNo = data['batch_no'];
+          this.passId = data['id'];
+          this.jumlah = data['jumlah'];
+          this.keterangan = data['pembelian'];
+          this.usia = data['usia_awal'];
+          this.tgl = data['tgl_datang'];
+          this.showList = true;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }
+
+  async saveForm() {
+    const alert = await this.alertCtrl.create({
+      cssClass: 'my-custom-class',
+      header: 'Pemberitahuan!',
+      message: 'Simpan data ini?',
+      buttons: [
+        {
+          text: 'Tidak',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {},
+        },
+        {
+          text: 'Ya',
+          handler: () => {
+            this.saveFormCommit();
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+
+  async saveFormCommit() {
+    let jumlah = this.jumlah.replaceAll(',', '');
+
+    if (
+      this.batchNo == null ||
+      this.batchNo == '' ||
+      Number(jumlah) == null ||
+      Number(jumlah) <= 0 ||
+      Number(this.usia) == null ||
+      Number(this.usia) <= 0
+    ) {
+      this.showTost('Data tidak lengkap');
+      return false;
+    }
+
+    const loading = await this.loadingCtrl.create({
+      cssClass: 'my-custom-class',
+      message: 'Mohon menunggu...',
+    });
+    await loading.present();
+
+    var headers = new HttpHeaders();
+    headers.append('Content-Type', 'application/json');
+    headers = headers.append('Authorization', 'Bearer ' + this.jwt); //bearer
+
+    let arrdata = {
+      action: this.action,
+      table: 'm_ayam',
+      data: {
+        batch_no: this.batchNo,
+        jumlah: jumlah,
+        usia_awal: this.usia,
+        tgl_datang: this.tgl,
+        pembelian: this.keterangan,
+      },
+      except: '',
+      where: { id: this.passId },
+    };
+    this.http
+      .post(conf.api_url_wartek + 'postdata', arrdata, { headers: headers })
+      .subscribe(
+        (data) => {
+          loading.dismiss();
+          this.showTost('Berhasil simpan data');
+          this.closeModal();
+        },
+        (error) => {
+          loading.dismiss();
+          this.showTost('Gagal');
+          console.log(error);
+        }
+      );
+  }
+
+  async showTost(param) {
+    let toast = await this.toastCtrl.create({
+      message: param,
+      duration: 1000,
+      position: 'bottom',
+    });
+    toast.present();
+  }
+
+  getFormat(e: any) {
+    this.jumlah = this.format(e.target.value);
+  }
+
+  format(valString) {
+    if (!valString) {
+      return '';
+    }
+    let val = valString.toString();
+    const parts = this.unFormat(val).split(this.DECIMAL_SEPARATOR);
+    return (
+      parts[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, this.GROUP_SEPARATOR) +
+      (!parts[1] ? '' : this.DECIMAL_SEPARATOR + parts[1])
+    );
+  }
+
+  unFormat(val) {
+    if (!val) {
+      return '';
+    }
+    val = val.replace(/^0+/, '');
+
+    if (this.GROUP_SEPARATOR === ',') {
+      return val.replace(/,/g, '');
+    } else {
+      return val.replace(/\./g, '');
+    }
+  }
+}

@@ -1,0 +1,129 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Form {{action}} Penjualan</ion-title>
+    <ion-buttons (click)="closeModal()" slot="start">
+      <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <div class="ion-padding" *ngIf="showList">
+    <ion-item>
+      <ion-label position="floating">Tanggal Produksi</ion-label>
+      <ion-datetime
+        displayFormat="DD-MM-YYYY"
+        placeholder="Pilih Tanggal"
+        [(ngModel)]="tglJual"
+      ></ion-datetime>
+      <ion-input
+        type="number"
+        hidden
+        [(ngModel)]="passId"
+        readonly="true"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Pelanggan</ion-label>
+      <ion-select
+        [(ngModel)]="pelanggan"
+        interface="action-sheet"
+        [interfaceOptions]="customActionSheetOptions"
+        cancelText="Batal"
+      >
+        <ion-select-option
+          type="text"
+          *ngFor="let pel of arrPelanggan"
+          value="{{pel.id_pel}}"
+          >{{pel.nama_pel}}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Jenis Telur</ion-label>
+      <ion-select [(ngModel)]="jenis_prod">
+        <ion-select-option
+          type="text"
+          *ngFor="let jenis of arrJenis"
+          value="{{jenis.reff_id}}"
+          >{{jenis.name}}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Tipe Harga</ion-label>
+      <ion-select [(ngModel)]="tipe_harga" (ionChange)="changeHarga($event);">
+        <ion-select-option
+          type="text"
+          *ngFor="let tipe of arrHarga"
+          value="{{tipe.id}}"
+          >{{tipe.label_harga}}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+    <ion-grid class="ion-no-padding">
+      <ion-row>
+        <ion-col size="4">
+          <ion-item>
+            <ion-label position="floating">Tray</ion-label>
+            <ion-input
+              type="number"
+              [(ngModel)]="jmlTray"
+              autocomplete="off"
+              (ionChange)="hitungTotalHarga()"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="3"><p>x {{h_tray || 0 | number: '1.0'}}</p></ion-col>
+        <ion-col size="5" class="ion-text-end"
+          ><p>Rp. {{th_tray || 0 | number: '1.0' }}</p></ion-col
+        >
+      </ion-row>
+      <ion-row>
+        <ion-col size="4">
+          <ion-item>
+            <ion-label position="floating">Telur</ion-label>
+            <ion-input
+              type="number"
+              [(ngModel)]="jmlTelur"
+              autocomplete="off"
+              (ionChange)="hitungTotalHarga()"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="3"><p>x {{h_telur || 0 | number: '1.0'}}</p></ion-col>
+        <ion-col size="5" class="ion-text-end"
+          ><p>Rp. {{th_telur || 0 | number: '1.0' }}</p></ion-col
+        >
+      </ion-row>
+      <ion-row>
+        <ion-col size="6"><h3>Total Bayar</h3></ion-col>
+        <ion-col size="6" class="ion-text-end"
+          ><h3>Rp. {{h_total || 0 | number: '1.0' }}</h3></ion-col
+        >
+      </ion-row>
+    </ion-grid>
+
+    <ion-button
+      (click)="saveForm()"
+      expand="block"
+      fill="solid"
+      class="bSave ion-margin-top"
+      shape="round"
+    >
+      {{(action == 'Add' ? 'Simpan':'Update')}}
+    </ion-button>
+  </div>
+
+  <div *ngIf="!showList" class="scroll-content">
+    <ion-list>
+      <ion-item *ngFor="let flist of fakeList">
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </h3>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

@@ -1,0 +1,88 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="onClick()">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Laporan Penjualan</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher
+    slot="fixed"
+    pullFactor="0.5"
+    pullMin="100"
+    pullMax="100"
+    (ionRefresh)="refreshData($event)"
+  >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size="12">
+        <ion-button fill="outline" shape="round">
+          <ion-icon slot="start" name="options-outline"></ion-icon>
+          <ion-datetime
+            displayFormat="DD-MM-YYYY"
+            [(ngModel)]="tglAwal"
+            (ionCancel)="clearTgl($event, 'awal')"
+            placeholder="Tanggal Awal"
+            (ionChange)="getDataChange($event, 'awal')"
+          ></ion-datetime>
+        </ion-button>
+        <ion-button fill="outline" shape="round">
+          <ion-icon slot="start" name="options-outline"></ion-icon>
+          <ion-datetime
+            displayFormat="DD-MM-YYYY"
+            [(ngModel)]="tglAkhir"
+            (ionCancel)="clearTgl($event,'akhir')"
+            placeholder="Tanggal Akhir"
+            (ionChange)="getDataChange($event,'akhir')"
+          ></ion-datetime>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12"></ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-card class="ion-margin-bottom total">
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="4" class="ion-text-start ion-padding-start"
+          >Dibayar</ion-col
+        >
+        <ion-col size="1">:</ion-col>
+        <ion-col size="7" class="ion-text-start ion-padding-start"
+          ><ion-text color="primary" class="ion-no-padding">
+            Rp. {{bayar || 0 | number:'1.0'}}
+          </ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="4" class="ion-text-start ion-padding-start"
+          >Piutang</ion-col
+        >
+        <ion-col size="1">:</ion-col>
+        <ion-col size="7" class="ion-text-start ion-padding-start"
+          ><ion-text color="danger" class="ion-no-padding"
+            >Rp. {{piutang || 0 | number:'1.0'}}</ion-text
+          ></ion-col
+        >
+      </ion-row>
+      <ion-row>
+        <ion-col size="4" class="ion-text-start ion-padding-start"
+          >Total</ion-col
+        >
+        <ion-col size="1">:</ion-col>
+        <ion-col size="7" class="ion-text-start ion-padding-start">
+          <ion-text color="success" class="ion-no-padding"
+            >Rp. {{total || 0 | number:'1.0'}}</ion-text
+          ></ion-col
+        >
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+</ion-content>

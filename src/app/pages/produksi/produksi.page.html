@@ -1,0 +1,215 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start" *ngIf="!isSearchbarOpened">
+      <ion-button>
+        <ion-back-button></ion-back-button>
+      </ion-button>
+    </ion-buttons>
+    <ion-title *ngIf="!isSearchbarOpened">Produksi</ion-title>
+    <ion-searchbar
+      id="mySearch"
+      class="search ion-no-border"
+      showCancelButton="focus"
+      (ionCancel)="setIsSearchbarClosed()"
+      expand="full"
+      [(ngModel)]="searchTerm"
+      (ionChange)="setFilteredItems($event)"
+      (ionClear)="cleared($event)"
+      (ionBlur)="blurFC($event)"
+      debounce="600"
+    ></ion-searchbar>
+    <ion-buttons slot="end" *ngIf="!isSearchbarOpened">
+      <ion-button (click)="setIsSearchbarOpened('true')">
+        <ion-icon slot="icon-only" name="search-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" [scrollEvents]="true">
+  <!-- fab placed to the bottom end -->
+  <ion-fab
+    vertical="bottom"
+    horizontal="end"
+    slot="fixed"
+    (click)="presentModal('','Add')"
+  >
+    <ion-fab-button class="mini">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-refresher
+    slot="fixed"
+    pullFactor="0.5"
+    pullMin="100"
+    pullMax="100"
+    (ionRefresh)="refreshData($event)"
+  >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-list *ngIf="showList">
+    <ion-grid class="ion-no-padding ion-margin-bottom">
+      <ion-row class="ion-no-padding">
+        <ion-col size="6">
+          <ion-button expand="block" fill="solid" shape="round">
+            <ion-icon slot="start" name="options-outline"></ion-icon>
+            <ion-datetime
+              class="ion-padding-top"
+              color="bright"
+              displayFormat="DD-MM-YYYY"
+              placeholder="Pilih Tanggal"
+              [(ngModel)]="tglProd"
+              (ionCancel)="clearTgl($event)"
+              (ionChange)="getDataChange($event)"
+            ></ion-datetime>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-item-sliding *ngFor="let list of arrList">
+      <ion-item-options side="start">
+        <ion-item-option (click)="presentModal(list.id,'Edit')">
+          <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+      <ion-item button class="cItem" lines="none">
+        <ion-label>
+          <p style="font-weight: bold; font-size: 16px">{{list.tgl_prod}}</p>
+          <p style="font-size: 14px">batch : {{ list.batch_no}}</p>
+          <ion-grid class="ion-no-padding">
+            <ion-row>
+              <ion-col size="4">
+                <p>Jumlah Tray</p>
+              </ion-col>
+              <ion-col size="1" class="ion-text-center">
+                <p>:</p>
+              </ion-col>
+              <ion-col size="7">
+                <ion-text class="ion-text-wrap copytext">
+                  <p>{{list.jml_tray}}</p>
+                </ion-text>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="4">
+                <p>Jumlah Telur</p>
+              </ion-col>
+              <ion-col size="1" class="ion-text-center">
+                <p>:</p>
+              </ion-col>
+              <ion-col size="7">
+                <ion-text class="ion-text-wrap copytext">
+                  <p>{{list.jml_telur}}</p>
+                </ion-text>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="4">
+                <p style="font-weight: bold">Total Telur</p>
+              </ion-col>
+              <ion-col size="1" class="ion-text-center">
+                <p>:</p>
+              </ion-col>
+              <ion-col size="7">
+                <ion-text class="ion-text-wrap copytext">
+                  <p style="font-weight: bold">{{list.total}}</p>
+                </ion-text>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="4">
+                <p>Jenis Telur</p>
+              </ion-col>
+              <ion-col size="1" class="ion-text-center">
+                <p>:</p>
+              </ion-col>
+              <ion-col size="7">
+                <ion-text class="ion-text-wrap copytext">
+                  <p>{{list.jenis_prod_ur}}</p>
+                </ion-text>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="4">
+                <p>Keterangan</p>
+              </ion-col>
+              <ion-col size="1" class="ion-text-center">
+                <p>:</p>
+              </ion-col>
+              <ion-col size="7">
+                <ion-text class="ion-text-wrap copytext">
+                  <p>{{list.keterangan}}</p>
+                </ion-text>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="4">
+                <p>Dicatat oleh</p>
+              </ion-col>
+              <ion-col size="1" class="ion-text-center">
+                <p>:</p>
+              </ion-col>
+              <ion-col size="7">
+                <ion-text class="ion-text-wrap copytext">
+                  <p>{{list.createBy}}</p>
+                </ion-text>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-label>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="delItem(list.id)">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+  <ion-infinite-scroll threshold="5%" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more data..."
+    >
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <div *ngIf="!showList" class="scroll-content" style="margin-top: -80px">
+    <ion-list>
+      <ion-item *ngFor="let flist of fakeList">
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </p>
+          <p>
+            <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Form {{action}} Harga</ion-title>
+    <ion-buttons (click)="closeModal()" slot="start">
+      <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="ion-padding" *ngIf="showList">
+    <ion-grid class="ion-no-padding">
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Nama Harga</ion-label>
+            <ion-input
+              type="text"
+              [(ngModel)]="labelHarga"
+              autocomplete="off"
+            ></ion-input>
+            <ion-input
+              type="number"
+              hidden
+              [(ngModel)]="passId"
+              readonly="true"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Harga per tray</ion-label>
+            <ion-input
+              [(ngModel)]="hargaTray"
+              (ionChange)="getFormat($event, 'tray')"
+              autocomplete="off"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Harga per telur</ion-label>
+            <ion-input
+              [(ngModel)]="hargaTelur"
+              (ionChange)="getFormat($event, 'telur')"
+              autocomplete="off"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-button
+      (click)="saveForm()"
+      expand="block"
+      fill="solid"
+      class="bSave ion-margin-top"
+      shape="round"
+    >
+      {{(action == 'Add' ? 'Simpan':'Update')}}
+    </ion-button>
+  </div>
+  <div *ngIf="!showList" class="scroll-content">
+    <ion-list>
+      <ion-item *ngFor="let flist of fakeList">
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </h3>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

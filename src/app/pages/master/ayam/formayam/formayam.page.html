@@ -1,0 +1,102 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Form {{action}} Ayam</ion-title>
+    <ion-buttons (click)="closeModal()" slot="start">
+      <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="ion-padding" *ngIf="showList">
+    <ion-grid class="ion-no-padding">
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Batch</ion-label>
+            <ion-input
+              type="text"
+              [(ngModel)]="batchNo"
+              autocomplete="off"
+            ></ion-input>
+            <ion-input
+              type="number"
+              hidden
+              [(ngModel)]="passId"
+              readonly="true"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Usia(Minggu)</ion-label>
+            <ion-input
+              type="number"
+              [(ngModel)]="usia"
+              autocomplete="off"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Jumlah</ion-label>
+            <ion-input
+              [(ngModel)]="jumlah"
+              (ionChange)="getFormat($event)"
+              autocomplete="off"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Tanggal Datang</ion-label>
+            <ion-datetime
+              displayFormat="DD-MM-YYYY"
+              placeholder="Pilih Tanggal"
+              [(ngModel)]="tgl"
+            ></ion-datetime>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Keterangan</ion-label>
+            <ion-textarea
+              rows="4"
+              cols="20"
+              [(ngModel)]="keterangan"
+            ></ion-textarea>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-button
+      (click)="saveForm()"
+      expand="block"
+      fill="solid"
+      class="bSave ion-margin-top"
+      shape="round"
+    >
+      {{(action == 'Add' ? 'Simpan':'Update')}}
+    </ion-button>
+  </div>
+
+  <div *ngIf="!showList" class="scroll-content">
+    <ion-list>
+      <ion-item *ngFor="let flist of fakeList">
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </h3>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

@@ -1,0 +1,101 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Form {{action}} Produksi</ion-title>
+    <ion-buttons (click)="closeModal()" slot="start">
+      <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <div class="ion-padding" *ngIf="showList">
+    <ion-item>
+      <ion-label position="floating">Tanggal Produksi</ion-label>
+      <ion-datetime
+        displayFormat="DD-MM-YYYY"
+        placeholder="Pilih Tanggal"
+        [(ngModel)]="tglProd"
+      ></ion-datetime>
+      <ion-input
+        type="number"
+        hidden
+        [(ngModel)]="passId"
+        readonly="true"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Batch No</ion-label>
+      <ion-select [(ngModel)]="batch">
+        <ion-select-option
+          type="text"
+          *ngFor="let batch of arrBatch"
+          value="{{batch.batch_no}}"
+          >{{batch.batch_no}}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Jenis Produksi Telur</ion-label>
+      <ion-select [(ngModel)]="jenis_prod">
+        <ion-select-option
+          type="text"
+          *ngFor="let jenis of arrJenis"
+          value="{{jenis.reff_id}}"
+          >{{jenis.name}}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Jumlah Tray</ion-label>
+      <ion-input
+        type="number"
+        [(ngModel)]="jmlTray"
+        autocomplete="off"
+        (ionChange)="hitungTotalTelur()"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Jumlah Telur</ion-label>
+      <ion-input
+        type="number"
+        [(ngModel)]="jmlTelur"
+        autocomplete="off"
+        (ionChange)="hitungTotalTelur()"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Total Telur</ion-label>
+      <ion-input
+        type="number"
+        [(ngModel)]="totalTelur"
+        autocomplete="off"
+        readonly="true"
+      ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Keterangan</ion-label>
+      <ion-textarea rows="4" cols="20" [(ngModel)]="keterangan"></ion-textarea>
+    </ion-item>
+    <ion-button
+      (click)="saveForm()"
+      expand="block"
+      fill="solid"
+      class="bSave ion-margin-top"
+      shape="round"
+    >
+      {{(action == 'Add' ? 'Simpan':'Update')}}
+    </ion-button>
+  </div>
+
+  <div *ngIf="!showList" class="scroll-content">
+    <ion-list>
+      <ion-item *ngFor="let flist of fakeList">
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </h3>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

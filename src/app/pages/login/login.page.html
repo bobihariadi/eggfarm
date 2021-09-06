@@ -1,0 +1,51 @@
+<ion-content class="ion-padding">
+  <div class="container">
+    <ion-grid>
+      <ion-row>
+        <ion-col class="ion-text-center">
+          <img src="assets/img/login.svg" alt="" />
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-padding-top ion-justify-content-center">
+        <ion-col size="10">
+          <ion-item>
+            <ion-icon slot="start" name="person-outline"></ion-icon>
+            <ion-label position="floating">Username</ion-label>
+            <ion-input
+              type="text"
+              [(ngModel)]="email"
+              autocomplete="false"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="10">
+          <ion-item>
+            <ion-icon slot="start" name="key-outline"></ion-icon>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input type="password" [(ngModel)]="password"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-justify-content-center ion-padding-top">
+        <ion-col size="10">
+          <ion-button
+            expand="full"
+            shape="round"
+            class="tombol"
+            disabled="{{ isDisabled }}"
+            (click)="goLoginNew()"
+          >
+            {{ btnLabel }}
+            <ion-spinner
+              name="crescent"
+              slot="end"
+              *ngIf="isDisabled"
+            ></ion-spinner>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

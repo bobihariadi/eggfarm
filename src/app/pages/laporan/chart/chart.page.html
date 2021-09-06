@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="onClick()">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Grafik Produksi</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher
+    slot="fixed"
+    pullFactor="0.5"
+    pullMin="100"
+    pullMax="100"
+    (ionRefresh)="refreshData($event)"
+  >
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div class="ion-padding">
+    <ion-card>
+      <ion-card-header><b>Harian</b> </ion-card-header>
+      <ion-card-content>
+        <canvas
+          style="overflow-x: scroll !important"
+          #lineCanvas
+          style="position: relative; height: 20vh; width: 40vw"
+        ></canvas>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header> <b>Mingguan</b> </ion-card-header>
+      <ion-card-content>
+        <canvas
+          #lineVancasMingguan
+          style="position: relative; height: 20vh; width: 40vw"
+        ></canvas>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- <ion-card>
+      <ion-card-header> Doughnut Chart </ion-card-header>
+      <ion-card-content>
+        <canvas
+          #doughnutCanvas
+          style="position: relative; height: 20vh; width: 40vw"
+        ></canvas>
+      </ion-card-content>
+    </ion-card> -->
+  </div>
+</ion-content>

@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Pembayaran</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>{{tglJual}}</ion-card-subtitle>
+      <ion-card-title>{{nama_pel}}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <h2>Total Harga <b>Rp. {{total_harga | number:'1.0' }}</b></h2>
+      <h2>Sisa Bayar <b>Rp. {{sisaBayar | number:'1.0' }}</b></h2>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-grid class="ion-margin-bottom">
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Tanggal Bayar</ion-label>
+          <ion-datetime
+            displayFormat="DD-MM-YYYY"
+            placeholder="Pilih Tanggal"
+            [(ngModel)]="tgl"
+          ></ion-datetime>
+          <ion-input
+            type="text"
+            hidden
+            [(ngModel)]="id_pel"
+            readonly="true"
+          ></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="floating">Total Bayar</ion-label>
+          <ion-input
+            [(ngModel)]="total_bayar"
+            #myTotalBayar="ngModel"
+            (ionChange)="getSisaBayar($event)"
+          ></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-button
+    (click)="saveForm()"
+    expand="block"
+    fill="solid"
+    shape="round"
+    class="ion-margin-top"
+  >
+    Simpan
+  </ion-button>
+</ion-content>

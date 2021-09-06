@@ -1,6 +1,6 @@
 {
-	"appId": "io.ionic.starter",
-	"appName": "eggfarm",
-	"webDir": "www",
-	"bundledWebRuntime": false
+  "appId": "io.egg.com",
+  "appName": "eggfarm",
+  "webDir": "www",
+  "bundledWebRuntime": false
 }

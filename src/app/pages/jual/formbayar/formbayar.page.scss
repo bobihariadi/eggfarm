@@ -1,0 +1,23 @@
+ion-content {
+  --background: rgb(250, 249, 249) !important;
+  .label {
+    width: 80px;
+    flex: none;
+  }
+  ion-item {
+    --background: rgb(152 181 247 / 13%);
+    border-radius: 10px;
+  }
+
+  ion-button {
+    text-transform: none;
+  }
+
+  ion-card {
+    border-radius: 10px;
+    border: none;
+    -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15) !important;
+    background: rgb(147 249 159 / 32%);
+  }
+}

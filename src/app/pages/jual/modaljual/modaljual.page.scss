@@ -1,0 +1,15 @@
+// .action-sheet-group {
+//   flex-shrink: 2;
+//   overscroll-behavior-y: contain;
+//   overflow-y: scroll;
+//   -webkit-overflow-scrolling: touch;
+//   pointer-events: all;
+
+//   background: var(--background);
+// }
+
+ion-content {
+  ion-button {
+    text-transform: none;
+  }
+}
